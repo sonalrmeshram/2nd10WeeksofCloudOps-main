@@ -45,7 +45,7 @@ services:
 #     # volumes:
 #     # - ./mysql_data:/var/lib/mysql
 
-# networks:
-#   appnet:
-#     driver: bridge
+networks:
+  appnet:
+    driver: bridge
 
