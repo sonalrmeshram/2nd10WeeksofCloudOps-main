@@ -40,4 +40,6 @@ ALTER TABLE `books`
 
 COMMIT;
 
-ALTER USER 'admin'@'%' IDENTIFIED WITH mysql_native_password BY 'Devops123';
+ALTER USER 'admin'@'%' IDENTIFIED WITH mysql_native_password BY 'Sonal45815';
+ALTER USER 'admin'@'%' IDENTIFIED BY 'Sonal45815';
+FLUSH PRIVILEGES;
