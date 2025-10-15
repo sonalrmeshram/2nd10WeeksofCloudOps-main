@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: my-container
-        image: nginx:latest
+        image: sonal45815/backend-app:latest
         ports:
         - containerPort: 80
 ---
