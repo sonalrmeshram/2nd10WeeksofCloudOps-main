@@ -16,7 +16,7 @@ spec:
       - name: backend
         image: sonal45815/backend-app:latest
         ports:
-        - containerPort: 86   
+        - containerPort: 80   
         env:
         - name: DB_HOST
           value: "kube.cy7uw4uu0e0x.us-east-1.rds.amazonaws.com"
