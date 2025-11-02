@@ -16,7 +16,7 @@ RUN npm install -g pm2
 COPY . .
 
 # Expose port 80 to the outside world
-EXPOSE 3000
+#EXPOSE 3000
 EXPOSE 80
 # Command to start the application with pm2
 #CMD ["pm2-runtime", "index.js", "--name", "backendapi"]
