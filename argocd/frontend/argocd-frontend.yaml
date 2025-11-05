@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: my-container
-        image: sonal45815/frontend-app:latest
+        image: 157664038953.dkr.ecr.us-east-1.amazonaws.com/backend:1
         ports:
         - containerPort: 80
 ---
