@@ -1,0 +1,65 @@
+pipeline {
+    agent any 
+
+    stages {
+        stage('Cleaning Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        stage('Checkout from Git') {
+            steps {
+                git branch: 'main', url: 'https://github.com/sonalrmeshram/2nd10WeeksofCloudOps-main.git'
+            }
+        }
+        stage("Docker Image Build") {
+            steps {
+                script {
+                    dir('client') {
+                        sh 'docker system prune -f'
+                        sh 'docker container prune -f'
+                        sh 'docker build -t frontend .'
+                    }
+                }
+            }
+        }
+        stage("ECR Image Pushing") {
+            steps {
+                script {
+                    sh '''
+                    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 157664038953.dkr.ecr.us-east-1.amazonaws.com
+                    docker tag frontend:latest 157664038953.dkr.ecr.us-east-1.amazonaws.com/frontend:${BUILD_NUMBER}
+                    docker push 157664038953.dkr.ecr.us-east-1.amazonaws.com/frontend:${BUILD_NUMBER}
+                    '''
+                }
+            }
+        }
+       stage('Update Deployment file') {
+    environment {
+        GIT_REPO_NAME = "2nd10WeeksofCloudOps-main"
+        GIT_USER_NAME = "sonalrmeshram"
+    }
+    steps {
+        dir('kubernetes-files') {
+            withCredentials([string(credentialsId: 'my-git-pattoken', variable: 'git_token')]) {
+                sh '''
+                    git config user.email "sonalrmeshram@gmail.com"
+                    git config user.name "sonalrmeshram"
+                    BUILD_NUMBER=${BUILD_NUMBER}
+                    echo $BUILD_NUMBER
+                    sed -i "s#image:.*#image: 157664038953.dkr.ecr.us-east-1.amazonaws.com/frontend:$BUILD_NUMBER#g" frontend-deploy-service.yaml
+                    sed -i "s#image:.*#image: 157664038953.dkr.ecr.us-east-1.amazonaws.com/frontend:$BUILD_NUMBER#g" ../argocd/frontend/argocd-frontend.yaml
+
+                    # Move to workspace root to stage both files correctly
+                    cd ..
+                    git add kubernetes-files/backend-deployment.yaml argocd/frontend/argocd-frontend.yaml
+                    git commit -m "Update deployment image to version $BUILD_NUMBER"
+                    git push https://${git_token}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                '''
+            }
+        }
+    }
+}
+
+    }
+}
