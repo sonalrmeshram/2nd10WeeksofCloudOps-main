@@ -77,23 +77,27 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/sonalrmeshram/2nd10WeeksofCloudOps-main.git'
             }
         }
-        stage('Update Deployment file') {
+       stage('Update Deployment file') {
             environment {
-                GIT_REPO_NAME = "2nd10WeeksofCloudOps-main"
+                GIT_REPO_NAME = "fullstack-authors-books-application"
                 GIT_USER_NAME = "sonalrmeshram"
             }
             steps {
-                dir('kubernetes-files') {
-                    withCredentials([string(credentialsId: 'my-git-pattoken', variable: 'git_token')]) {
-                        sh '''
-                            git config user.email "sonalrmeshram@gmail.com"
-                            git config user.name "sonalrmeshram"
-                            BUILD_NUMBER=${BUILD_NUMBER}
-                            echo $BUILD_NUMBER
-                            sed -i "s#image:.*#image: $REPOSITORY_URI$AWS_ECR_REPO_NAME:$BUILD_NUMBER#g" frontend-deploy-service.yaml
-                            git add .
-                            git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
-                            git push https://${git_token}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                withCredentials([string(credentialsId: 'my-git-pattoken', variable: 'git_token')]) {
+                    sh '''
+                        set -e
+                        git config user.email "sonalrmeshram@gmail.com"
+                        git config user.name "sonalrmeshram"
+                        BUILD_NUMBER=${BUILD_NUMBER}
+                        echo "Build Number: $BUILD_NUMBER"
+                        
+                        # Update deployment file with new image
+                            sed -i "s#image:.*#image: 157664038953.dkr.ecr.us-east-1.amazonaws.com/backend:$BUILD_NUMBER#g" argocd/frontend/argocd-frontend.yml
+                        
+                        # Commit and push changes
+                        git add argocd/frontend/argocd-frontend.yml
+                        git commit -m "Update deployment image to version $BUILD_NUMBER"
+                        git push https://${git_token}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
         
                         '''
                     }
