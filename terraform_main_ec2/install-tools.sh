@@ -90,9 +90,9 @@ helm install stable prometheus-community/kube-prometheus-stack -n prometheus
 echo "Initialization script completed successfully."
 
 #----------------------sonarQube install-----------------------------------
-#sudo yum -y install wget nfs-utils
-#sudo wget -O /etc/yum.repos.d/sonar.repo http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo
-#sudo yum -y install sonar
+sudo yum -y install wget nfs-utils
+sudo wget -O /etc/yum.repos.d/sonar.repo http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo
+sudo yum -y install sonar
 #-----------------------JFROg-----------------------------
 #sudo wget https://releases.jfrog.io/artifactory/artifactory-rpms/artifactory-rpms.repo -O jfrog-artifactory-rpms.repo;
 
