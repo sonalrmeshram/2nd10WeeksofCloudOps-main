@@ -76,7 +76,7 @@ pipeline {
             steps {
                 script {
                     def repoNameLower = env.AWS_ECR_REPO_NAME.toLowerCase()
-                    sh "trivy --cache-dir /var/cache/trivy image ${env.REPOSITORY_URI}${repoNameLower}:${env.BUILD_NUMBER} > trivyimage.txt"
+                    sh "trivy --cache-dir .trivy image ${env.REPOSITORY_URI}${repoNameLower}:${env.BUILD_NUMBER} > trivyimage.txt"
                 }
             }
         }
