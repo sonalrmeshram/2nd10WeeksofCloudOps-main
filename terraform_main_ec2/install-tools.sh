@@ -72,11 +72,6 @@ sudo rpm -ivh https://github.com/aquasecurity/trivy/releases/download/v0.48.3/tr
 #------------------Docker install-------------
 #sudo amazon-linux-extras install docker #linux 2022
 
-#------------------sonar install by using docker---------------
-docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
-
-
-
 #---------------------------ArgoCD----------------
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -93,6 +88,10 @@ echo "Initialization script completed successfully."
 sudo yum -y install wget nfs-utils
 sudo wget -O /etc/yum.repos.d/sonar.repo http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo
 sudo yum -y install sonar
+
+#------------------sonar install by using docker---------------
+docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+
 #-----------------------JFROg-----------------------------
 #sudo wget https://releases.jfrog.io/artifactory/artifactory-rpms/artifactory-rpms.repo -O jfrog-artifactory-rpms.repo;
 
