@@ -24,7 +24,7 @@ pipeline {
         }
         stage('Sonarqube Analysis') {
             steps {
-                dir('backend') {
+                dir('client') {
                     withSonarQubeEnv('sonar-server') {
                         sh ''' $SCANNER_HOME/bin/sonar-scanner \
                         -Dsonar.projectKey=frontend \
@@ -44,7 +44,7 @@ pipeline {
         }
         stage('Trivy File Scan') {
             steps {
-                dir('backend') {
+                dir('client') {
                     sh 'trivy fs . > trivyfs.txt'
                 }
             }
@@ -52,7 +52,7 @@ pipeline {
         stage("Docker Image Build") {
             steps {
                 script {
-                    dir('backend') {
+                    dir('client') {
                         sh 'docker system prune -f'
                         sh 'docker container prune -f'
                         sh 'docker build -t ${AWS_ECR_REPO_NAME} .'
