@@ -91,7 +91,7 @@ pipeline {
                         git config user.name "sonalrmeshram"
                         BUILD_NUMBER=${BUILD_NUMBER}
                         echo $BUILD_NUMBER
-                        sed -i "s#image:.*#image: $REPOSITORY_URI$AWS_ECR_REPO_NAME:$BUILD_NUMBER#g" argocd/frontend/argocd-frontend.yaml
+                        sed -i "s#image: 157664038953.dkr.ecr.us-east-1.amazonaws.com/backend:6
                         git add argocd/frontend/argocd-frontend.yaml
                         git commit -m "Update deployment Image to version ${BUILD_NUMBER}" || echo "No changes to commit"
                         git pull --rebase https://${git_token}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} main
