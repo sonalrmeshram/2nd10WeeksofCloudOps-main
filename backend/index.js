@@ -13,23 +13,33 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("common"));
 
-// MySQL connection
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,          // e.g. 10.0.0.5
-  user: process.env.DB_USERNAME,      // e.g. book_user
-  password: process.env.DB_PASSWORD,  // e.g. strong-pass
-  port: process.env.DB_PORT || 3306,  // set DB_PORT=3306 in .env
-  database: "test",                   // make sure this DB exists
+// // MySQL connection
+// const db = mysql.createConnection({
+//   host: process.env.DB_HOST,          // e.g. 10.0.0.5
+//   user: process.env.DB_USERNAME,      // e.g. book_user
+//   password: process.env.DB_PASSWORD,  // e.g. strong-pass
+//   port: process.env.DB_PORT || 3306,  // set DB_PORT=3306 in .env
+//   database: "test",                   // make sure this DB exists
+// });
+
+// MySQL connection pool
+const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT || 3306,
+  database: "test",
+  connectionLimit: 10,
 });
 
-// Connect once at startup
-db.connect((err) => {
-  if (err) {
-    console.error("DB connection error:", err);
-  } else {
-    console.log("DB connected");
-  }
-});
+// // Connect once at startup
+// db.connect((err) => {
+//   if (err) {
+//     console.error("DB connection error:", err);
+//   } else {
+//     console.log("DB connected");
+//   }
+// });
 
 // Simple health for LB
 app.get("/", (req, res) => {
